@@ -22,7 +22,7 @@ router.get('/:bookId', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-    console.log('POST api/user');
+    console.log('POST api/book');
     console.log(req.body);
 
     let book = new Book();

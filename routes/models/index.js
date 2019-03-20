@@ -3,6 +3,6 @@ const users = require('./users');
 const books = require('./books');
 
 models.use('/users', users);
-models.use('/users', books)
+models.use('/books', books)
 
 module.exports = models;
