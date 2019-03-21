@@ -14,7 +14,7 @@ exports.bookFindId = function(req, res){
 
     Book.findById(bookId, (err, book) =>{
         if (err) return res.status(500).send({message: `Error al realizar la peticion: ${err}`});
-        if(!book) return res.status(404).send({message: `El usuario no existe`});
+        if(!book) return res.status(404).send({message: `El libro no existe`});
 
         res.status(200).send({book});
     });
@@ -34,5 +34,29 @@ exports.bookCreate = function(req, res){
         if (err) res.status(500).send({message:`Error al salvar en la base de datos: ${err} `});
 
         res.status(200).send({book: bookStored});
+    });
+}
+
+exports.bookUpdate = function(req, res) {
+    let bookId = req.params.bookId;
+    let update = req.body;
+
+    Book.findByIdAndUpdate(bookId, update, (err, bookUpdated) =>{
+        if (err) return res.status(500).send({message: `Error al actualizar el libro: ${err}`});
+
+        res.status(200).send({book: bookUpdated});
+    });
+}
+
+exports.bookDelete = function(req, res) {
+    let bookId = req.params.bookId;
+
+    Book.findById(bookId, (err, book) => {
+        if (err) res.status(500).send({message: `Error al borrar libro: ${err}`});
+
+        book.remove(err => {
+            if (err) res.status(500).send({message: `Error al borrar libro: ${err}`});
+            res.status(200).send({message: `El libro ha sido eliminado`})
+        });
     });
 }

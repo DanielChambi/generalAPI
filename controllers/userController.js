@@ -35,3 +35,27 @@ exports.userCreate = function(req, res) {
         res.status(200).send({user: userStored});
     });
 }
+
+exports.userUpdate = function(req, res) {
+    let userId = req.params.userId;
+    let update = req.body;
+
+    User.findByIdAndUpdate(userId, update, (err, userUpdated) =>{
+        if (err) return res.status(500).send({message: `Error al actualizar el usuario: ${err}`});
+
+        res.status(200).send({user: userUpdated});
+    });
+}
+
+exports.userDelete = function(req, res) {
+    let userId = req.params.userId;
+
+    User.findById(userId, (err, user) => {
+        if (err) res.status(500).send({message: `Error al borrar usuario: ${err}`});
+
+        user.remove(err => {
+            if (err) res.status(500).send({message: `Error al borrar usuario: ${err}`});
+            res.status(200).send({message: `El usuario ha sido eliminado`})
+        });
+    });
+}
