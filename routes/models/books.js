@@ -3,7 +3,7 @@ const Book = require('../../models/book');
 const bookController = require('../../controllers/bookController');
 
 router.get('/', bookController.bookGetList);
-router.get('/:element&:string', bookController.bookFindProperty);
+router.get('/:element&:string', bookController.bookFind);
 
 
 router.post('/', bookController.bookCreate);

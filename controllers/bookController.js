@@ -9,16 +9,21 @@ exports.bookGetList = function(req, res){
     })
 }
 
-exports.bookFindId = function(req, res){
-    let bookId = req.params.bookId;
+exports.bookFind = function(req, res){
+    let element = req.params.element.toString();
+    let string = req.params.string;
+    
+    var projection = new Object;
+    projection[element] = string;
 
-    Book.findById(bookId, (err, book) =>{
+    console.log(projection);
+    Book.find(projection, (err, books) =>{
         if (err) return res.status(500).send({message: `Error al realizar la peticion: ${err}`});
-        if(!book) return res.status(404).send({message: `El libro no existe`});
-
-        res.status(200).send({book});
+        if(!books) return res.status(404).send({message: `No existen entradas`});
+        
+        res.status(200).send({books});
     });
-}
+};
 
 exports.bookCreate = function(req, res){
     console.log('POST api/book');
@@ -61,19 +66,3 @@ exports.bookDelete = function(req, res) {
     });
 }
 
-exports.bookFindProperty = function(req, res){
-    let element = req.params.element.toString();
-    let string = req.params.string;
-    
-    var projection = new Object;
-    projection[element] = string;
-
-    console.log(projection);
-    Book.find(projection, (err, books) =>{
-        if (err) return res.status(500).send({message: `Error al realizar la peticion: ${err}`});
-        if(!books) return res.status(404).send({message: `No existen entradas`});
-        
-        res.status(200).send({books});
-    });
-    
-}

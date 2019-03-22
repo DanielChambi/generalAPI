@@ -9,16 +9,21 @@ exports.userGetList = function(req, res) {
     })
 };
 
-exports.userFindId = function(req, res) {
-    let userId = req.params.userId;
+exports.userFind = function(req, res){
+    let element = req.params.element.toString();
+    let string = req.params.string;
+    
+    var projection = new Object;
+    projection[element] = string;
 
-    User.findById(userId, (err, user) =>{
+    console.log(projection);
+    User.find(projection, (err, users) =>{
         if (err) return res.status(500).send({message: `Error al realizar la peticion: ${err}`});
-        if(!user) return res.status(404).send({message: `El usuario no existe`});
-
-        res.status(200).send({user});
+        if(!users) return res.status(404).send({message: `No existen entradas`});
+        
+        res.status(200).send({users});
     });
-}
+};
 
 exports.userCreate = function(req, res) {
     console.log('POST api/user');
