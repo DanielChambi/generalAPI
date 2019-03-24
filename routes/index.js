@@ -1,11 +1,9 @@
 const routes = require('express').Router();
 
-const models = require('./models');
+const books = require('./books');
+const users = require('./users');
 
-routes.get('/', (req, res) => {
-    res.status(200).json({message: 'Routes connected'});
-});
-
-routes.use('/models', models);
+routes.use('/users', users);
+routes.use('/books', books);
 
 module.exports = routes;
