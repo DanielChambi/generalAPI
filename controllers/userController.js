@@ -30,9 +30,10 @@ exports.userCreate = function(req, res) {
     console.log(req.body);
 
     let user = new User();
-    user.name = req.body.name;
+    user.username = req.body.username;
     user.email = req.body.email;
     user.password = req.body.password;
+    user.activated = true;
 
     user.save((err, userStored) =>{
         if (err) res.status(500).send({message:`Error al salvar en la base de datos: ${err} `});

@@ -1,6 +1,6 @@
 const router = require('express').Router();
-const User = require('../../models/user');
-const userController = require('../../controllers/userController');
+const User = require('../models/user');
+const userController = require('../controllers/userController');
 
 router.get('/', userController.userGetList);
 router.get('/:element&:string', userController.userFind);

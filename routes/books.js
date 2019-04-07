@@ -1,6 +1,6 @@
 const router = require('express').Router();
-const Book = require('../../models/book');
-const bookController = require('../../controllers/bookController');
+const Book = require('../models/book');
+const bookController = require('../controllers/bookController');
 
 router.get('/', bookController.bookGetList);
 router.get('/:element&:string', bookController.bookFind);
