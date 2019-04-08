@@ -1,10 +1,11 @@
 var User = require('../models/user');
+const bcrypt = require('bcrypt');
 
 exports.userGetList = function(req, res) {
     User.find({}, (err, users) =>{
         if (err) return res.status(500).send({message: `Error al realizar la peticion: ${err}`});
         if(!users) return res.status(404).send({message: `No existen usuarios`});
-        
+
         res.status(200).send({users});
     })
 };
@@ -25,6 +26,30 @@ exports.userFind = function(req, res){
     });
 };
 
+exports.userAuthenticate = function(req, res){
+    let username = req.body.username;
+    let password = req.body.password;
+    
+    User.findOne({'username': username}, (err, user) =>{
+        if (err) return res.status(500).send({message: `Error al realizar la peticion: ${err}`});
+        if (!user) return res.status(404).send({message: `No existen entradas`});
+
+        var userLogged = {
+            id: user.id,
+            username: user.username,
+            email: user.email,
+        }
+
+        var samePass = bcrypt.compareSync(password, user.password);
+
+        if(username != '' && password != '' && samePass && user.activated){
+            res.status(200).send({userLogged});
+        } else {
+            res.status(401).send({message: 'Fallo de autenticación'})
+        }
+    });
+}
+
 exports.userCreate = function(req, res) {
     console.log('POST api/user');
     console.log(req.body);
@@ -32,7 +57,7 @@ exports.userCreate = function(req, res) {
     let user = new User();
     user.username = req.body.username;
     user.email = req.body.email;
-    user.password = req.body.password;
+    user.password = bcrypt.hashSync(req.body.password, 0);
     user.activated = true;
 
     user.save((err, userStored) =>{
@@ -45,6 +70,12 @@ exports.userCreate = function(req, res) {
 exports.userUpdate = function(req, res) {
     let userId = req.params.userId;
     let update = req.body;
+
+    console.log(update);
+
+    if(update.password){
+        update.password = bcrypt.hashSync(update.password, 0);
+    }
 
     User.findByIdAndUpdate(userId, update, (err, userUpdated) =>{
         if (err) return res.status(500).send({message: `Error al actualizar el usuario: ${err}`});
